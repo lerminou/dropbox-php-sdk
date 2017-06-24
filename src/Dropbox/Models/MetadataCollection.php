@@ -67,6 +67,7 @@ class MetadataCollection extends BaseModel
         $this->hasMoreItems = isset($data[$this->getCollectionHasMoreItemsKey()]) && $data[$this->getCollectionHasMoreItemsKey()] ? true : false;
 
         $items = [];
+        //By default we take the const key but for some responses we need another key.
         if($itemsKey == ""){
           $items = isset($data[$this->getCollectionItemsKey()]) ? $data[$this->getCollectionItemsKey()] : [];
         }else{

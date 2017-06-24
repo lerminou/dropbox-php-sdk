@@ -710,16 +710,16 @@ class Dropbox
     }
 
     /**
-     * Get a shared link to stream contents of a file
+     * List shared links of a file
      *
      * @param  string $path Path to the file you want a shared link to
-     * @param boolean $direct return only direct links to the file and not the parent shared links
+     * @param boolean $direct_only return only direct links to the file and not the parent shared links
      *
      * https://www.dropbox.com/developers/documentation/http/documentation#sharing-create_shared_link_with_settings
      *
      * @return \Kunnu\Dropbox\Models\MetadataCollection
      */
-    public function listSharedLinks($path, $direct = true)
+    public function listSharedLinks($path, $direct_only = true)
     {
         //Path cannot be null
         if (is_null($path)) {
@@ -727,7 +727,7 @@ class Dropbox
         }
 
         //Get Shared Link
-        $response = $this->postToAPI('/sharing/list_shared_links', ['path' => $path, 'direct_only' => $direct]);
+        $response = $this->postToAPI('/sharing/list_shared_links', ['path' => $path, 'direct_only' => $direct_only]);
 
         //Make and Return the Model
         return $this->makeModelFromResponse($response, 'links');
@@ -749,11 +749,39 @@ class Dropbox
             throw new DropboxClientException("Path cannot be null.");
         }
 
+        //Check if links exists, because only 1 per file is allowed.
+        $links = $this->listSharedLinks($path);
+        if($links->getItems() != []){
+          return $links->getItems();
+        }
+
         //Get Shared Link
         $response = $this->postToAPI('/sharing/create_shared_link_with_settings', ['path' => $path]);
 
         //Make and Return the Model
         return $this->makeModelFromResponse($response);
+    }
+
+    /**
+     * Remove a shared link  of a file
+     *
+     * @param  string $sharedPath Shared link you want to revoke
+     *
+     * https://www.dropbox.com/developers/documentation/http/documentation#revoke_shared_link
+     *
+     * @return null
+     */
+    public function revokeSharedLink($sharedPath)
+    {
+        //Path cannot be null
+        if (is_null($sharedPath)) {
+            throw new DropboxClientException("Path cannot be null.");
+        }
+
+        //Get Shared Link
+        $response = $this->postToAPI('/sharing/revoke_shared_link', ['path' => $sharedPath]);
+
+        return $response;
     }
 
     /**
