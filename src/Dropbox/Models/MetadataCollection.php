@@ -57,15 +57,21 @@ class MetadataCollection extends BaseModel
      * Create a new Metadata Collection
      *
      * @param array $data Collection Data
+     * @param string $itemsKey key of the response to get entries
      */
-    public function __construct(array $data)
+    public function __construct(array $data, $itemsKey = "")
     {
         parent::__construct($data);
 
         $this->cursor = isset($data[$this->getCollectionCursorKey()]) ? $data[$this->getCollectionCursorKey()] : '';
         $this->hasMoreItems = isset($data[$this->getCollectionHasMoreItemsKey()]) && $data[$this->getCollectionHasMoreItemsKey()] ? true : false;
 
-        $items = isset($data[$this->getCollectionItemsKey()]) ? $data[$this->getCollectionItemsKey()] : [];
+        $items = [];
+        if($itemsKey == ""){
+          $items = isset($data[$this->getCollectionItemsKey()]) ? $data[$this->getCollectionItemsKey()] : [];
+        }else{
+          $items = isset($data[$itemsKey]) ? $data[$itemsKey] : [];
+        }
         $this->processItems($items);
     }
 

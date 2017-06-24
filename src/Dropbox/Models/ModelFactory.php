@@ -13,6 +13,20 @@ class ModelFactory
      */
     public static function make(array $data = array())
     {
+        if (isset($data['.tag']) && isset($data['url'])) {
+            $tag = $data['.tag'];
+
+            //FileLinkMetadata
+            if ($tag === 'file') {
+                return new FileLinkMetadata($data);
+            }
+
+            //FolderLinkMetadata
+            if ($tag === 'folder') {
+                return new FolderLinkMetadata($data);
+            }
+        }
+
         if (isset($data['.tag']) && isset($data['id'])) {
             $tag = $data['.tag'];
 
