@@ -1,7 +1,7 @@
 <?php
 namespace Kunnu\Dropbox\Models;
 
-class MetadataCollection extends BaseModel
+class LinkCollection extends BaseModel
 {
 
     /**
@@ -9,7 +9,7 @@ class MetadataCollection extends BaseModel
      *
      * @const string
      */
-    const COLLECTION_ITEMS_KEY = 'entries';
+    const COLLECTION_ITEMS_KEY = 'links';
 
     /**
      * Collection Cursor Key

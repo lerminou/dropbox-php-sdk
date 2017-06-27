@@ -730,7 +730,7 @@ class Dropbox
         $response = $this->postToAPI('/sharing/list_shared_links', ['path' => $path, 'direct_only' => $direct_only]);
 
         //Make and Return the Model
-        return $this->makeModelFromResponse($response, 'links');
+        return $this->makeModelFromResponse($response);
     }
 
     /**
@@ -751,8 +751,8 @@ class Dropbox
 
         //Check if links exists, because only 1 per file is allowed.
         $links = $this->listSharedLinks($path);
-        if($links->getItems() != []){
-          return $links->getItems();
+        if($links->getItems()->isNotEmpty()){
+          return $links->getItems()[0];
         }
 
         //Get Shared Link

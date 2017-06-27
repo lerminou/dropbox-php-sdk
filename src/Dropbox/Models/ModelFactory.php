@@ -13,6 +13,7 @@ class ModelFactory
      */
     public static function make(array $data = array())
     {
+        //var_dump($data);
         if (isset($data['.tag']) && isset($data['url'])) {
             $tag = $data['.tag'];
 
@@ -44,6 +45,11 @@ class ModelFactory
         //Temporary Link
         if (isset($data['metadata']) && isset($data['link'])) {
             return new TemporaryLink($data);
+        }
+
+        //LinkList
+        if (isset($data['links'])) {
+            return new LinkCollection($data);
         }
 
         //List
